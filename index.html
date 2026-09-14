@@ -324,7 +324,8 @@
     const SEED_HISTORY = [
       {date:'2026-08-19',prices:{NVDA:219.38,AVGO:361.96,MSFT:484.00,GOOGL:345.11,META:549.10,AMZN:263.58,ISRG:400.51,ABBV:263.65,V:369.60,GE:360.80,CEG:272.39,WMT:116.39,XOM:167.46}},
       {date:'2026-08-21',prices:{NVDA:215.59,AVGO:367.86,MSFT:484.31,GOOGL:344.24,META:549.66,AMZN:258.91,ISRG:379.16,ABBV:266.23,V:370.25,GE:348.42,CEG:275.07,WMT:102.42,XOM:166.05}},
-      {date:'2026-08-28',prices:{NVDA:223.78,AVGO:372.52,MSFT:515.36,GOOGL:347.35,META:584.47,AMZN:266.43,ISRG:371.26,ABBV:257.46,V:382.76,GE:343.65,CEG:281.66,WMT:102.82,XOM:156.37}}
+      {date:'2026-08-28',prices:{NVDA:223.78,AVGO:372.52,MSFT:515.36,GOOGL:347.35,META:584.47,AMZN:266.43,ISRG:371.26,ABBV:257.46,V:382.76,GE:343.65,CEG:281.66,WMT:102.82,XOM:156.37}},
+      {date:'2026-09-14',source:'Online market snapshot · 11:46 AM ET',prices:{NVDA:212.08,AVGO:347.82,MSFT:505.14,GOOGL:345.86,META:658.85,AMZN:254.34,ISRG:374.73,ABBV:262.72,V:375.74,GE:317.80,CEG:265.93,WMT:109.08,XOM:165.74}}
     ];
     const HISTORY_KEY = 'northstar-weekly-history-v1';
     const DRAFT_KEY = 'northstar-weekly-drafts-v1';
@@ -367,6 +368,7 @@
       const latest=history.at(-1),previous=history.at(-2);
       const value=valueOf(latest),weekly=previous?value-valueOf(previous):0;
       document.querySelector('#latestDate').textContent=formatDate(latest.date);
+      document.querySelector('#latestDateNote').textContent=latest.source||'Saved browser history';
       document.querySelector('#latestValue').textContent=money.format(value);
       document.querySelector('#latestWeekly').textContent=previous?signedCurrency(weekly):'Opening mark';
       setTone(document.querySelector('#latestWeekly'),weekly,Boolean(previous));
@@ -497,7 +499,7 @@
     });
     document.addEventListener('click',event=>{const button=event.target.closest('[data-edit-week]');if(button)setWeek(button.dataset.editWeek);});
 
-    renderHero();renderHistory();setWeek(nextFriday(history.at(-1).date),{scroll:false});
+    renderHero();renderHistory();setWeek(history.at(-1).date,{scroll:false});
   </script>
 </body>
 </html>
