@@ -105,14 +105,14 @@
     input[type="date"] { padding: 7px 10px; color-scheme: dark; }
     input:focus-visible, button:focus-visible, .text-button:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 2px; }
 
-    .draft-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; border-bottom: 1px solid var(--line); background: var(--line); }
+    .draft-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; border-bottom: 1px solid var(--line); background: var(--line); }
     .draft-metric { padding: 16px 20px; background: var(--panel-high); }
     .draft-metric span { color: var(--muted); font: 8px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
     .draft-metric strong { display: block; margin-top: 6px; font: 500 15px/1 var(--mono); font-variant-numeric: tabular-nums; }
 
     .table-scroll { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; }
-    .editor-table { min-width: 760px; }
+    .editor-table { min-width: 880px; }
     th { padding: 12px 10px; border-bottom: 1px solid var(--line); color: var(--faint); font: 400 8px/1.25 var(--mono); letter-spacing: .09em; text-align: right; text-transform: uppercase; white-space: nowrap; }
     th:first-child, td:first-child { padding-left: 20px; text-align: left; }
     td { height: 58px; padding: 8px 10px; border-bottom: 1px solid var(--line); color: var(--ink-soft); font: 11px/1.25 var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
@@ -123,6 +123,13 @@
     .price-input[aria-invalid="true"] { border-color: var(--loss); background: var(--loss-bg); }
     .row-change.gain { background: var(--gain-bg); }
     .row-change.loss { background: var(--loss-bg); }
+    .editor-table tfoot td { height: auto; padding-top: 11px; padding-bottom: 11px; background: var(--panel-high); }
+    .editor-table tfoot tr:first-child td { border-top: 2px solid var(--line-strong); }
+    .editor-table tfoot .balance-label { color: var(--muted); font: 600 9px/1.3 var(--mono); letter-spacing: .07em; text-transform: uppercase; }
+    .editor-table tfoot .balance-amount { padding-right: 20px; font-weight: 700; }
+    .editor-table tfoot .new-balance td { border-top: 1px solid var(--line-strong); background: rgba(201,171,114,.07); }
+    .editor-table tfoot .new-balance .balance-label { color: var(--gold-bright); }
+    .editor-table tfoot .new-balance .balance-amount { color: var(--gold-bright); font-size: 13px; }
 
     .sheet-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; padding: 18px 20px; }
     .button {
@@ -231,12 +238,18 @@
           <div class="draft-metric"><span>Prices entered</span><strong id="enteredCount">0 / 13</strong></div>
           <div class="draft-metric"><span>This week’s value</span><strong id="draftValue">—</strong></div>
           <div class="draft-metric"><span>Weekly change</span><strong id="draftChange">—</strong></div>
+          <div class="draft-metric"><span>New project P/L</span><strong id="draftBalance">—</strong></div>
         </div>
 
         <div class="table-scroll">
           <table class="editor-table">
-            <thead><tr><th scope="col">Company</th><th scope="col">Last week</th><th scope="col">Shares</th><th scope="col">This week</th><th scope="col">Value</th><th scope="col">Total P/L</th></tr></thead>
+            <thead><tr><th scope="col">Company</th><th scope="col">Last week’s price</th><th scope="col">Shares</th><th scope="col">Current price<br>(today)</th><th scope="col">P/L per share<br>(today − last week)</th><th scope="col">Current value</th><th scope="col">Total P/L<br>(shares × P/L)</th></tr></thead>
             <tbody id="editorBody"></tbody>
+            <tfoot>
+              <tr><td class="balance-label" colspan="5">Last week’s project profit/loss</td><td class="balance-amount" colspan="2" id="previousBalance">—</td></tr>
+              <tr><td class="balance-label" colspan="5">Plus this week’s total profit/loss</td><td class="balance-amount" colspan="2" id="weeklyProfit">—</td></tr>
+              <tr class="new-balance"><td class="balance-label" colspan="5">New project profit/loss balance</td><td class="balance-amount" colspan="2" id="newBalance">—</td></tr>
+            </tfoot>
           </table>
         </div>
 
@@ -371,7 +384,7 @@
       document.querySelector('#editorBody').innerHTML=HOLDINGS.map(holding=>{
         const prior=previous?Number(previous.prices[holding.ticker]):null;
         const price=prices[holding.ticker]??'';
-        return `<tr data-row="${holding.ticker}"><td><span class="company">${escapeHtml(holding.company)}</span><span class="ticker">${holding.ticker}</span></td><td>${prior===null?'—':money.format(prior)}</td><td>${holding.shares}</td><td><label class="sr-only" for="price-${holding.ticker}">${holding.ticker} price for ${date}</label><input class="price-input" id="price-${holding.ticker}" data-price="${holding.ticker}" type="number" min="0.01" step="0.01" inputmode="decimal" value="${price}" placeholder="0.00"></td><td data-value>—</td><td class="row-change" data-change>—</td></tr>`;
+        return `<tr data-row="${holding.ticker}"><td><span class="company">${escapeHtml(holding.company)}</span><span class="ticker">${holding.ticker}</span></td><td>${prior===null?'—':money.format(prior)}</td><td>${holding.shares}</td><td><label class="sr-only" for="price-${holding.ticker}">${holding.ticker} price for ${date}</label><input class="price-input" id="price-${holding.ticker}" data-price="${holding.ticker}" type="number" min="0.01" step="0.01" inputmode="decimal" value="${price}" placeholder="0.00"></td><td class="row-change" data-per-share>—</td><td data-value>—</td><td class="row-change" data-change>—</td></tr>`;
       }).join('');
       document.querySelectorAll('[data-price]').forEach(input=>input.addEventListener('input',()=>{
         input.removeAttribute('aria-invalid');saveDraft(date,Object.fromEntries(Array.from(document.querySelectorAll('[data-price]')).map(field=>[field.dataset.price,field.value])));renderDraft();
@@ -389,18 +402,28 @@
       HOLDINGS.forEach(holding=>{
         const price=prices[holding.ticker],valid=Number.isFinite(price)&&price>0;
         const row=document.querySelector(`[data-row="${holding.ticker}"]`);
-        const valueCell=row.querySelector('[data-value]'),changeCell=row.querySelector('[data-change]');
-        if(!valid||!previous){valueCell.textContent='—';changeCell.textContent='—';setTone(changeCell,0,false);return;}
+        const perShareCell=row.querySelector('[data-per-share]'),valueCell=row.querySelector('[data-value]'),changeCell=row.querySelector('[data-change]');
+        if(!valid||!previous){perShareCell.textContent='—';valueCell.textContent='—';changeCell.textContent='—';setTone(perShareCell,0,false);setTone(changeCell,0,false);return;}
         count+=1;
-        const value=price*holding.shares,change=(price-Number(previous.prices[holding.ticker]))*holding.shares;
-        total+=value;valueCell.textContent=money.format(value);changeCell.textContent=signedCurrency(change);setTone(changeCell,change);
+        const perShare=price-Number(previous.prices[holding.ticker]),value=price*holding.shares,change=perShare*holding.shares;
+        total+=value;perShareCell.textContent=signedCurrency(perShare);valueCell.textContent=money.format(value);changeCell.textContent=signedCurrency(change);setTone(perShareCell,perShare);setTone(changeCell,change);
       });
       const complete=count===HOLDINGS.length&&Boolean(previous);
       const change=complete?total-valueOf(previous):0;
+      const previousBalance=previous?valueOf(previous)-invested:0;
+      const newBalance=previousBalance+change;
       document.querySelector('#enteredCount').textContent=`${count} / ${HOLDINGS.length}`;
       document.querySelector('#draftValue').textContent=count?money.format(total):'—';
       document.querySelector('#draftChange').textContent=complete?signedCurrency(change):'—';
       setTone(document.querySelector('#draftChange'),change,complete);
+      document.querySelector('#draftBalance').textContent=complete?signedCurrency(newBalance):'—';
+      setTone(document.querySelector('#draftBalance'),newBalance,complete);
+      document.querySelector('#previousBalance').textContent=previous?signedCurrency(previousBalance):'—';
+      setTone(document.querySelector('#previousBalance'),previousBalance,Boolean(previous));
+      document.querySelector('#weeklyProfit').textContent=complete?signedCurrency(change):'—';
+      setTone(document.querySelector('#weeklyProfit'),change,complete);
+      document.querySelector('#newBalance').textContent=complete?signedCurrency(newBalance):'—';
+      setTone(document.querySelector('#newBalance'),newBalance,complete);
       document.querySelector('#saveWeek').disabled=!complete;
       document.querySelector('#copySheet').disabled=!complete;
       document.querySelector('#formStatus').textContent=message||(count?`${count} of ${HOLDINGS.length} prices entered. Draft saved on this device.`:'Enter this week’s prices to begin.');
@@ -451,6 +474,8 @@
       const date=document.querySelector('#weekDate').value,previous=previousFor(date),prices=currentValues();
       const rows=[['Company','Symbol','Price/share last week','Shares','Price/share this week','Profit/loss per share','Total profit/loss']];
       HOLDINGS.forEach(holding=>{const prior=Number(previous.prices[holding.ticker]),price=prices[holding.ticker];rows.push([holding.company,holding.ticker,prior.toFixed(2),holding.shares,price.toFixed(2),(price-prior).toFixed(2),((price-prior)*holding.shares).toFixed(2)]);});
+      const weekly=valueOf({prices})-valueOf(previous),previousBalance=valueOf(previous)-invested;
+      rows.push([],['','','','','','Last week’s project P/L',previousBalance.toFixed(2)],['','','','','','This week’s total P/L',weekly.toFixed(2)],['','','','','','New project P/L balance',(previousBalance+weekly).toFixed(2)]);
       await copyText(rows.map(row=>row.join('\t')).join('\n'));document.querySelector('#formStatus').textContent='Spreadsheet rows copied. Paste them into the first cell of your class sheet.';
     });
     document.querySelector('#downloadCsv').addEventListener('click',()=>download('northstar-stock-history.csv',csvContents(),'text/csv;charset=utf-8'));
