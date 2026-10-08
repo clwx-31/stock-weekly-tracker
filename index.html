@@ -98,7 +98,7 @@
     .section-copy { max-width: 56ch; margin: 10px 0 0; color: var(--muted); font-size: 12px; }
     .date-control { display: grid; flex: none; gap: 6px; }
     .date-control span { color: var(--muted); font: 8px/1 var(--mono); letter-spacing: .11em; text-transform: uppercase; }
-    input[type="date"], .price-input {
+    select, .price-input {
       min-height: 39px; border: 1px solid var(--line-strong); border-radius: 0;
       background: var(--canvas); color: var(--ink); font-family: var(--mono); font-variant-numeric: tabular-nums;
     }
@@ -211,7 +211,7 @@
     <section class="hero">
       <p class="eyebrow">Business class · Year-long market project</p>
       <h1>Your Friday stock sheet, ready every week.</h1>
-      <p class="hero-copy">Enter this week’s prices next to last week’s marks. The tracker calculates every position, saves your history, and prepares rows for your class spreadsheet.</p>
+      <p class="hero-copy">Review the latest stock prices, compare every position with the previous snapshot, and copy the verified results into your class spreadsheet.</p>
       <div class="hero-meta"><span>13 positions</span><span>9 sectors</span><span><b>$20,000.00</b> starting capital</span><span>Midday Friday snapshots</span></div>
     </section>
 
@@ -227,15 +227,15 @@
       <section class="sheet" aria-labelledby="sheet-title">
         <div class="sheet-head">
           <div>
-            <p class="section-kicker">Weekly entry desk</p>
+            <p class="section-kicker">Stock comparison</p>
             <h2 id="sheet-title">Previous snapshot → Selected date</h2>
-            <p class="section-copy" id="comparisonCopy">Enter one positive price for every stock. Calculations update as you type.</p>
+            <p class="section-copy" id="comparisonCopy">Published stock prices and calculated results.</p>
           </div>
-          <label class="date-control"><span>This week’s date</span><input type="date" id="weekDate" required></label>
+          <label class="date-control"><span>Review snapshot</span><select id="weekDate"></select></label>
         </div>
 
         <div class="draft-summary" aria-live="polite">
-          <div class="draft-metric"><span>Prices entered</span><strong id="enteredCount">0 / 13</strong></div>
+          <div class="draft-metric"><span>Stocks tracked</span><strong id="enteredCount">0 / 13</strong></div>
           <div class="draft-metric"><span>This week’s value</span><strong id="draftValue">—</strong></div>
           <div class="draft-metric"><span>Snapshot change</span><strong id="draftChange">—</strong></div>
           <div class="draft-metric"><span>New project P/L</span><strong id="draftBalance">—</strong></div>
@@ -243,52 +243,30 @@
 
         <div class="table-scroll">
           <table class="editor-table">
-            <thead><tr><th scope="col">Company</th><th scope="col">Previous price</th><th scope="col">Shares</th><th scope="col">Selected date’s price</th><th scope="col">P/L per share<br>(selected − previous)</th><th scope="col">Current value</th><th scope="col">Total P/L<br>(shares × P/L)</th></tr></thead>
+            <thead><tr><th scope="col">Company</th><th scope="col">Symbol</th><th scope="col" id="previousPriceHeading">Last week’s price</th><th scope="col">Shares</th><th scope="col" id="currentPriceHeading">Today’s price</th><th scope="col">P/L per share<br>(selected − previous)</th><th scope="col">Current value</th><th scope="col">Total P/L<br>(shares × P/L)</th></tr></thead>
             <tbody id="editorBody"></tbody>
             <tfoot>
-              <tr><td class="balance-label" colspan="5">Previous snapshot’s project profit/loss</td><td class="balance-amount" colspan="2" id="previousBalance">—</td></tr>
-              <tr><td class="balance-label" colspan="5">Plus this week’s total profit/loss</td><td class="balance-amount" colspan="2" id="weeklyProfit">—</td></tr>
-              <tr class="new-balance"><td class="balance-label" colspan="5">New project profit/loss balance</td><td class="balance-amount" colspan="2" id="newBalance">—</td></tr>
+              <tr><td class="balance-label" colspan="6">Previous snapshot’s project profit/loss</td><td class="balance-amount" colspan="2" id="previousBalance">—</td></tr>
+              <tr><td class="balance-label" colspan="6">Plus this snapshot’s total profit/loss</td><td class="balance-amount" colspan="2" id="weeklyProfit">—</td></tr>
+              <tr class="new-balance"><td class="balance-label" colspan="6">New project profit/loss balance</td><td class="balance-amount" colspan="2" id="newBalance">—</td></tr>
             </tfoot>
           </table>
         </div>
 
-        <div class="sheet-actions">
-          <button class="button" id="fillPrevious" type="button">Fill last prices</button>
-          <button class="button" id="clearDraft" type="button">Clear</button>
-          <button class="button" id="copySheet" type="button" disabled>Copy sheet rows</button>
-          <button class="button primary" id="saveWeek" type="button" disabled>Save this week</button>
-          <button class="button" id="nextWeek" type="button" hidden>Start next week</button>
-        </div>
+        <div class="sheet-actions"><button class="button" id="copySheet" type="button">Copy sheet rows</button></div>
         <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
       </section>
 
       <aside class="sidebar">
-        <section class="side-card">
-          <div class="side-label"><span>Friday routine</span><span>01—03</span></div>
-          <ol class="steps">
-            <li>Record prices around 11:20 AM Eastern.</li>
-            <li>Check the totals, then save the week.</li>
-            <li>Copy the rows into your class spreadsheet.</li>
-          </ol>
-        </section>
-        <section class="side-card">
-          <div class="side-label"><span>Backup &amp; restore</span><span>Local</span></div>
-          <div class="side-actions">
-            <button class="button" id="downloadCsv" type="button">Download all history (.csv)</button>
-            <button class="button" id="downloadBackup" type="button">Download backup (.json)</button>
-            <button class="button" id="importButton" type="button">Import backup</button>
-            <input class="sr-only" id="importFile" type="file" accept=".csv,.json,text/csv,application/json">
-          </div>
-          <p class="privacy-note">Weekly saves stay in this browser. Download a backup occasionally or before switching devices.</p>
-        </section>
+        <section class="side-card"><div class="side-label"><span>Class spreadsheet</span></div><ol class="steps"><li>Review the snapshot date and quote times.</li><li>Check the per-share and total profit/loss.</li><li>Copy the rows into your class spreadsheet.</li></ol></section>
+        <section class="side-card"><div class="side-label"><span>Download record</span></div><div class="side-actions"><button class="button" id="downloadCsv" type="button">Download all history (.csv)</button><button class="button" id="downloadBackup" type="button">Download history (.json)</button></div><p class="privacy-note">Stock prices and holdings are maintained through published website updates.</p></section>
       </aside>
     </div>
 
     <section class="history-section" aria-labelledby="history-title">
       <div class="history-head">
         <div><p class="section-kicker">Saved record</p><h2 id="history-title">Week-by-week history</h2></div>
-        <p class="section-copy">Select any week to review or correct its prices.</p>
+        <p class="section-copy">Select any snapshot to review its published prices.</p>
       </div>
       <div class="table-scroll history-table-wrap">
         <table class="history-table">
@@ -301,7 +279,7 @@
 
   <footer>
     <span>Simulated portfolio for coursework. Not investment advice.</span>
-    <code>NSW · Portfolio 001 · Browser-saved</code>
+    <code>NSW · Portfolio 001 · Published record</code>
   </footer>
 
   <script>
@@ -327,183 +305,46 @@
       {date:'2026-08-28',prices:{NVDA:223.78,AVGO:372.52,MSFT:515.36,GOOGL:347.35,META:584.47,AMZN:266.43,ISRG:371.26,ABBV:257.46,V:382.76,GE:343.65,CEG:281.66,WMT:102.82,XOM:156.37}},
       {date:'2026-09-14',source:'Online market snapshot · 11:46 AM ET',prices:{NVDA:212.08,AVGO:347.82,MSFT:505.14,GOOGL:345.86,META:658.85,AMZN:254.34,ISRG:374.73,ABBV:262.72,V:375.74,GE:317.80,CEG:265.93,WMT:109.08,XOM:165.74}},
       {date:'2026-09-28',source:'Online market snapshot · 11:05 AM ET',prices:{NVDA:229.44,AVGO:349.45,MSFT:507.35,GOOGL:340.60,META:720.68,AMZN:246.84,ISRG:413.34,ABBV:266.25,V:367.34,GE:318.90,CEG:259.36,WMT:109.11,XOM:163.22}},
+      {date:'2026-10-02',source:'Stock Analysis historical closing prices · 4:00 PM EDT',prices:{NVDA:233.95,AVGO:355.14,MSFT:517.53,GOOGL:343.50,META:728.08,AMZN:251.52,ISRG:391.95,ABBV:262.82,V:360.66,GE:309.56,CEG:257.49,WMT:104.26,XOM:164.01}},
       {date:'2026-10-08',source:'Stock Analysis intraday quotes · 11:08–11:35 AM EDT (times vary by stock)',quoteTimes:{NVDA:'11:22',AVGO:'11:33',MSFT:'11:16',GOOGL:'11:09',META:'11:22',AMZN:'11:34',ISRG:'11:13',ABBV:'11:26',V:'11:34',GE:'11:35',CEG:'11:23',WMT:'11:08',XOM:'11:29'},prices:{NVDA:236.10,AVGO:371.85,MSFT:530.42,GOOGL:352.46,META:721.29,AMZN:258.28,ISRG:412.93,ABBV:266.51,V:374.96,GE:300.52,CEG:295.00,WMT:109.76,XOM:168.35}}
     ];
-    const HISTORY_KEY = 'northstar-weekly-history-v1';
-    const DRAFT_KEY = 'northstar-weekly-drafts-v1';
+    const cents = value => Math.round(Number(value)*100);
+    const history = SEED_HISTORY;
+    const invested = HOLDINGS.reduce((sum,h)=>sum+cents(h.buy)*h.shares,0)/100;
     const money = new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'});
     const dateFormat = new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
-    const cents = value => Math.round(Number(value)*100);
-    const invested = HOLDINGS.reduce((sum,holding)=>sum+cents(holding.buy)*holding.shares,0)/100;
-    let history = loadHistory();
-
-    function clone(value){ return JSON.parse(JSON.stringify(value)); }
-    function sortHistory(items){ return items.sort((a,b)=>a.date.localeCompare(b.date)); }
-    function validPrice(price){ return Number.isFinite(Number(price))&&Number(price)>0&&Math.abs(Number(price)*100-cents(price))<1e-7; }
-    function validPrices(prices){ return HOLDINGS.every(holding=>validPrice(prices?.[holding.ticker])); }
-    function loadJson(key,fallback){ try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(fallback));}catch(error){return clone(fallback);} }
-    function loadHistory(){
-      const stored=loadJson(HISTORY_KEY,[]);
-      const merged=new Map(SEED_HISTORY.map(item=>[item.date,clone(item)]));
-      if(Array.isArray(stored)) stored.filter(item=>item?.date&&validPrices(item.prices)).forEach(item=>merged.set(item.date,item));
-      return sortHistory(Array.from(merged.values()));
-    }
-    function saveHistory(){ localStorage.setItem(HISTORY_KEY,JSON.stringify(history)); }
-    function drafts(){ return loadJson(DRAFT_KEY,{}); }
-    function saveDraft(date,prices){ const all=drafts();all[date]=prices;localStorage.setItem(DRAFT_KEY,JSON.stringify(all)); }
-    function removeDraft(date){ const all=drafts();delete all[date];localStorage.setItem(DRAFT_KEY,JSON.stringify(all)); }
-    function formatDate(date){ return dateFormat.format(new Date(`${date}T12:00:00Z`)); }
-    function nextFriday(date){
-      const value=new Date(`${date}T12:00:00Z`);
-      do{value.setUTCDate(value.getUTCDate()+1);}while(value.getUTCDay()!==5);
-      return value.toISOString().slice(0,10);
-    }
-    function valueOf(snapshot){ return HOLDINGS.reduce((sum,holding)=>sum+holding.shares*cents(snapshot.prices[holding.ticker]),0)/100; }
-    function previousFor(date){ return [...history].filter(item=>item.date<date).pop()||null; }
-    function savedFor(date){ return history.find(item=>item.date===date)||null; }
-    function signedCurrency(value){ return `${value>=0?'+':'−'}${money.format(Math.abs(value))}`; }
-    function setTone(element,value,complete=true){ element.classList.remove('gain','loss');if(complete&&value!==0)element.classList.add(value>0?'gain':'loss'); }
-    function escapeHtml(value){ return String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char])); }
-
-    function currentValues(){ return Object.fromEntries(Array.from(document.querySelectorAll('[data-price]')).map(input=>[input.dataset.price,Number(input.value)])); }
-    function isComplete(){ return validPrices(currentValues()); }
-
-    function renderHero(){
-      const latest=history.at(-1),previous=history.at(-2);
-      const value=valueOf(latest),weekly=previous?value-valueOf(previous):0;
-      document.querySelector('#latestDate').textContent=formatDate(latest.date);
-      document.querySelector('#latestDateNote').textContent=latest.source||'Saved browser history';
-      document.querySelector('#latestValue').textContent=money.format(value);
-      document.querySelector('#latestWeekly').textContent=previous?signedCurrency(weekly):'Opening mark';
-      setTone(document.querySelector('#latestWeekly'),weekly,Boolean(previous));
-      document.querySelector('#latestAccount').textContent=money.format(value+CASH);
-    }
-
+    function formatDate(date){return dateFormat.format(new Date(`${date}T12:00:00Z`));}
+    function valueOf(snapshot){return HOLDINGS.reduce((sum,h)=>sum+cents(snapshot.prices[h.ticker])*h.shares,0)/100;}
+    function previousFor(date){return history.filter(item=>item.date<date).at(-1)||null;}
+    function signedCurrency(value){return `${value>=0?'+':'−'}${money.format(Math.abs(value))}`;}
+    function tone(value){return value>0?'gain':value<0?'loss':'';}
+    function metric(id,value,signed=false){const el=document.querySelector(id);el.textContent=signed?signedCurrency(value):money.format(value);el.classList.remove('gain','loss');if(signed&&tone(value))el.classList.add(tone(value));}
+    function rowValues(h,snapshot,previous){const current=cents(snapshot.prices[h.ticker]),prior=previous?cents(previous.prices[h.ticker]):null;return {current:current/100,prior:prior===null?null:prior/100,perShare:prior===null?null:(current-prior)/100,value:current*h.shares/100,change:prior===null?null:(current-prior)*h.shares/100};}
+    function renderHero(){const latest=history.at(-1),previous=previousFor(latest.date);document.querySelector('#latestDate').textContent=formatDate(latest.date);document.querySelector('#latestDateNote').textContent=latest.source||'Published snapshot';metric('#latestValue',valueOf(latest));metric('#latestAccount',(cents(valueOf(latest))+cents(CASH))/100);metric('#latestWeekly',previous?(cents(valueOf(latest))-cents(valueOf(previous)))/100:0,true);}
     function renderEditor(date=document.querySelector('#weekDate').value){
-      const previous=previousFor(date);
-      const saved=savedFor(date);
-      const draft=drafts()[date];
-      const prices=draft||(saved?clone(saved.prices):{});
-      document.querySelector('#comparisonCopy').textContent=previous
-        ? `Comparing ${formatDate(previous.date)} with ${formatDate(date)}. Enter one positive price for every stock.`
-        : 'Choose a date after the first saved week to create a comparison.';
-      document.querySelector('#editorBody').innerHTML=HOLDINGS.map(holding=>{
-        const prior=previous?Number(previous.prices[holding.ticker]):null;
-        const price=prices[holding.ticker]??'';
-        return `<tr data-row="${holding.ticker}"><td><span class="company">${escapeHtml(holding.company)}</span><span class="ticker">${holding.ticker}${saved?.quoteTimes?.[holding.ticker]?` · ${escapeHtml(saved.quoteTimes[holding.ticker])} AM EDT`:''}</span></td><td>${prior===null?'—':money.format(prior)}</td><td>${holding.shares}</td><td><label class="sr-only" for="price-${holding.ticker}">${holding.ticker} price for ${date}</label><input class="price-input" id="price-${holding.ticker}" data-price="${holding.ticker}" type="number" min="0.01" step="0.01" inputmode="decimal" value="${price}" placeholder="0.00"></td><td class="row-change" data-per-share>—</td><td data-value>—</td><td class="row-change" data-change>—</td></tr>`;
-      }).join('');
-      document.querySelectorAll('[data-price]').forEach(input=>input.addEventListener('input',()=>{
-        input.removeAttribute('aria-invalid');saveDraft(date,Object.fromEntries(Array.from(document.querySelectorAll('[data-price]')).map(field=>[field.dataset.price,field.value])));renderDraft();
-      }));
-      document.querySelector('#nextWeek').hidden=!saved;
-      document.querySelector('#saveWeek').textContent=saved?'Update saved week':'Save this week';
-      renderDraft(saved?'Reviewing a saved week. Change any price and save again to correct it.':undefined);
+      const snapshot=history.find(item=>item.date===date);if(!snapshot)return;
+      document.querySelector('#previousPriceHeading').textContent=`Previous price (${previousFor(date)?formatDate(previousFor(date).date):'opening'})`;document.querySelector('#currentPriceHeading').textContent=`Current price (${formatDate(date)})`;
+      const previous=previousFor(date),value=valueOf(snapshot),change=previous?(cents(value)-cents(valueOf(previous)))/100:0;
+      document.querySelector('#comparisonCopy').textContent=previous?`Comparing ${formatDate(previous.date)} with ${formatDate(date)}. ${previous.source||'Published snapshot'} → ${snapshot.source||'Published snapshot'}.`:'Opening purchase snapshot.';
+      document.querySelector('#editorBody').innerHTML=HOLDINGS.map(h=>{const r=rowValues(h,snapshot,previous);return `<tr data-row="${h.ticker}"><td><span class="company">${h.company}</span></td><td><span class="ticker">${h.ticker}</span>${snapshot.quoteTimes?.[h.ticker]?`<small>${snapshot.quoteTimes[h.ticker]} AM EDT</small>`:''}</td><td>${r.prior===null?'—':money.format(r.prior)}</td><td>${h.shares}</td><td>${money.format(r.current)}</td><td class="${tone(r.perShare)}">${r.perShare===null?'—':signedCurrency(r.perShare)}</td><td>${money.format(r.value)}</td><td class="${tone(r.change)}">${r.change===null?'—':signedCurrency(r.change)}</td></tr>`;}).join('');
+      document.querySelector('#enteredCount').textContent=`${HOLDINGS.length} / ${HOLDINGS.length}`;
+      metric('#draftValue',value);metric('#draftChange',change,true);metric('#draftBalance',(cents(value)-cents(invested))/100,true);
+      metric('#previousBalance',previous?(cents(valueOf(previous))-cents(invested))/100:0,true);metric('#weeklyProfit',change,true);metric('#newBalance',(cents(value)-cents(invested))/100,true);
+      document.querySelector('#copySheet').disabled=!previous;
     }
-
-    function renderDraft(message){
-      const date=document.querySelector('#weekDate').value;
-      const previous=previousFor(date);
-      const prices=currentValues();
-      let total=0,count=0;
-      HOLDINGS.forEach(holding=>{
-        const price=prices[holding.ticker],valid=validPrice(price);
-        const row=document.querySelector(`[data-row="${holding.ticker}"]`);
-        const perShareCell=row.querySelector('[data-per-share]'),valueCell=row.querySelector('[data-value]'),changeCell=row.querySelector('[data-change]');
-        if(!valid||!previous){perShareCell.textContent='—';valueCell.textContent='—';changeCell.textContent='—';setTone(perShareCell,0,false);setTone(changeCell,0,false);return;}
-        count+=1;
-        const perShare=(cents(price)-cents(previous.prices[holding.ticker]))/100,value=cents(price)*holding.shares/100,change=(cents(price)-cents(previous.prices[holding.ticker]))*holding.shares/100;
-        total+=value;perShareCell.textContent=signedCurrency(perShare);valueCell.textContent=money.format(value);changeCell.textContent=signedCurrency(change);setTone(perShareCell,perShare);setTone(changeCell,change);
-      });
-      const complete=count===HOLDINGS.length&&Boolean(previous)&&validPrices(prices);
-      const change=complete?total-valueOf(previous):0;
-      const previousBalance=previous?valueOf(previous)-invested:0;
-      const newBalance=previousBalance+change;
-      document.querySelector('#enteredCount').textContent=`${count} / ${HOLDINGS.length}`;
-      document.querySelector('#draftValue').textContent=count?money.format(total):'—';
-      document.querySelector('#draftChange').textContent=complete?signedCurrency(change):'—';
-      setTone(document.querySelector('#draftChange'),change,complete);
-      document.querySelector('#draftBalance').textContent=complete?signedCurrency(newBalance):'—';
-      setTone(document.querySelector('#draftBalance'),newBalance,complete);
-      document.querySelector('#previousBalance').textContent=previous?signedCurrency(previousBalance):'—';
-      setTone(document.querySelector('#previousBalance'),previousBalance,Boolean(previous));
-      document.querySelector('#weeklyProfit').textContent=complete?signedCurrency(change):'—';
-      setTone(document.querySelector('#weeklyProfit'),change,complete);
-      document.querySelector('#newBalance').textContent=complete?signedCurrency(newBalance):'—';
-      setTone(document.querySelector('#newBalance'),newBalance,complete);
-      document.querySelector('#saveWeek').disabled=!complete;
-      document.querySelector('#copySheet').disabled=!complete;
-      document.querySelector('#formStatus').textContent=message||(count?`${count} of ${HOLDINGS.length} prices entered. Draft saved on this device.`:'Enter this week’s prices to begin.');
-    }
-
-    function renderHistory(){
-      document.querySelector('#historyBody').innerHTML=[...history].reverse().map((snapshot,reverseIndex)=>{
-        const index=history.length-1-reverseIndex,previous=history[index-1];
-        const value=valueOf(snapshot),weekly=previous?value-valueOf(previous):0,total=value-invested;
-        return `<tr><td>${formatDate(snapshot.date)}</td><td>${money.format(value)}</td><td class="${previous?(weekly>0?'gain':weekly<0?'loss':''):''}">${previous?signedCurrency(weekly):'Opening mark'}</td><td class="${total>0?'gain':total<0?'loss':''}">${signedCurrency(total)}</td><td><button class="text-button" type="button" data-edit-week="${snapshot.date}">Review</button></td></tr>`;
-      }).join('');
-    }
-
-    function setWeek(date,{scroll=true}={}){
-      document.querySelector('#weekDate').value=date;renderEditor(date);
-      if(scroll)document.querySelector('#tracker').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
-    }
-    function validateForm(){
-      if(isComplete()&&previousFor(document.querySelector('#weekDate').value))return true;
-      document.querySelectorAll('[data-price]').forEach(input=>input.setAttribute('aria-invalid',String(!(validPrice(input.value)))));
-      document.querySelector('#formStatus').textContent='Enter a positive price with at most two decimal places for all 13 stocks before saving.';
-      document.querySelector('[data-price][aria-invalid="true"]')?.focus();return false;
-    }
-    async function copyText(text){
-      try{await navigator.clipboard.writeText(text);}catch(error){const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();}
-    }
+    function renderHistory(){document.querySelector('#historyBody').innerHTML=[...history].reverse().map(snapshot=>{const previous=previousFor(snapshot.date),value=valueOf(snapshot),change=previous?(cents(value)-cents(valueOf(previous)))/100:0,gain=(cents(value)-cents(invested))/100;return `<tr><td>${formatDate(snapshot.date)}</td><td>${money.format(value)}</td><td class="${tone(change)}">${previous?signedCurrency(change):'Opening mark'}</td><td class="${tone(gain)}">${signedCurrency(gain)}</td><td><button class="text-button" type="button" data-review-week="${snapshot.date}">Review</button></td></tr>`;}).join('');}
+    function sheetRows(date){const snapshot=history.find(item=>item.date===date),previous=previousFor(date);if(!snapshot||!previous)return '';const rows=[['Company','Symbol','Price/share previous snapshot','Shares','Price/share selected date','Profit/loss per share','Current value','Total profit/loss']];HOLDINGS.forEach(h=>{const r=rowValues(h,snapshot,previous);rows.push([h.company,h.ticker,r.prior.toFixed(2),h.shares,r.current.toFixed(2),r.perShare.toFixed(2),r.value.toFixed(2),r.change.toFixed(2)]);});rows.push([],['Previous snapshot project P/L',((cents(valueOf(previous))-cents(invested))/100).toFixed(2)],['Snapshot total P/L',((cents(valueOf(snapshot))-cents(valueOf(previous)))/100).toFixed(2)],['New project P/L balance',((cents(valueOf(snapshot))-cents(invested))/100).toFixed(2)]);return rows.map(row=>row.join('\t')).join('\n');}
+    async function copyText(text){try{await navigator.clipboard.writeText(text);}catch(error){const area=document.createElement('textarea');area.value=text;document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();}}
     function download(name,contents,type){const url=URL.createObjectURL(new Blob([contents],{type}));const link=document.createElement('a');link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-    function csvContents(){return ['date,ticker,price',...history.flatMap(snapshot=>HOLDINGS.map(holding=>`${snapshot.date},${holding.ticker},${Number(snapshot.prices[holding.ticker]).toFixed(2)}`))].join('\n')+'\n';}
-
+    function csvContents(){return ['date,ticker,price',...history.flatMap(snapshot=>HOLDINGS.map(h=>`${snapshot.date},${h.ticker},${Number(snapshot.prices[h.ticker]).toFixed(2)}`))].join('\n')+'\n';}
+    document.querySelector('#weekDate').innerHTML=[...history].reverse().map(item=>`<option value="${item.date}">${formatDate(item.date)}</option>`).join('');
+    document.querySelector('#weekDate').value=history.at(-1).date;
     document.querySelector('#weekDate').addEventListener('change',event=>renderEditor(event.target.value));
-    document.querySelector('#fillPrevious').addEventListener('click',()=>{
-      const previous=previousFor(document.querySelector('#weekDate').value);if(!previous)return;
-      HOLDINGS.forEach(holding=>document.querySelector(`[data-price="${holding.ticker}"]`).value=Number(previous.prices[holding.ticker]).toFixed(2));
-      saveDraft(document.querySelector('#weekDate').value,Object.fromEntries(HOLDINGS.map(holding=>[holding.ticker,Number(previous.prices[holding.ticker]).toFixed(2)])));renderDraft('Last week’s marks are filled in. Replace them with the new prices.');
-    });
-    document.querySelector('#clearDraft').addEventListener('click',()=>{
-      const date=document.querySelector('#weekDate').value;removeDraft(date);document.querySelectorAll('[data-price]').forEach(input=>input.value='');renderDraft('Draft cleared for this date.');
-    });
-    document.querySelector('#saveWeek').addEventListener('click',()=>{
-      if(!validateForm())return;
-      const date=document.querySelector('#weekDate').value,prices=currentValues();
-      history=history.filter(item=>item.date!==date);history.push({date,prices});sortHistory(history);saveHistory();removeDraft(date);
-      renderHero();renderHistory();renderEditor(date);document.querySelector('#formStatus').textContent=`Saved ${formatDate(date)}. This week is now part of your permanent browser history.`;
-    });
-    document.querySelector('#nextWeek').addEventListener('click',()=>setWeek(nextFriday(document.querySelector('#weekDate').value)));
-    document.querySelector('#copySheet').addEventListener('click',async()=>{
-      if(!validateForm())return;
-      const date=document.querySelector('#weekDate').value,previous=previousFor(date),prices=currentValues();
-      const rows=[['Company','Symbol','Price/share previous snapshot','Shares','Price/share selected date','Profit/loss per share','Total profit/loss']];
-      HOLDINGS.forEach(holding=>{const prior=Number(previous.prices[holding.ticker]),price=prices[holding.ticker];rows.push([holding.company,holding.ticker,prior.toFixed(2),holding.shares,price.toFixed(2),((cents(price)-cents(prior))/100).toFixed(2),((cents(price)-cents(prior))*holding.shares/100).toFixed(2)]);});
-      const weekly=valueOf({prices})-valueOf(previous),previousBalance=valueOf(previous)-invested;
-      rows.push([],['','','','','','Previous snapshot’s project P/L',previousBalance.toFixed(2)],['','','','','','Snapshot total P/L',weekly.toFixed(2)],['','','','','','New project P/L balance',(previousBalance+weekly).toFixed(2)]);
-      await copyText(rows.map(row=>row.join('\t')).join('\n'));document.querySelector('#formStatus').textContent='Spreadsheet rows copied. Paste them into the first cell of your class sheet.';
-    });
+    document.querySelector('#copySheet').addEventListener('click',async()=>{await copyText(sheetRows(document.querySelector('#weekDate').value));document.querySelector('#formStatus').textContent='Spreadsheet rows copied.';});
     document.querySelector('#downloadCsv').addEventListener('click',()=>download('northstar-stock-history.csv',csvContents(),'text/csv;charset=utf-8'));
-    document.querySelector('#downloadBackup').addEventListener('click',()=>download('northstar-stock-backup.json',JSON.stringify({version:1,exportedAt:new Date().toISOString(),history},null,2)+'\n','application/json'));
-    document.querySelector('#importButton').addEventListener('click',()=>document.querySelector('#importFile').click());
-    document.querySelector('#importFile').addEventListener('change',async event=>{
-      const file=event.target.files[0];if(!file)return;
-      try{
-        const text=await file.text();let imported=[];
-        if(file.name.toLowerCase().endsWith('.json')){const parsed=JSON.parse(text);imported=Array.isArray(parsed)?parsed:parsed.history;}
-        else{
-          const grouped={};text.trim().split(/\r?\n/).slice(1).forEach(line=>{const [date,ticker,price]=line.split(',');if(!grouped[date])grouped[date]={};grouped[date][ticker]=Number(price);});
-          imported=Object.entries(grouped).map(([date,prices])=>({date,prices}));
-        }
-        if(!Array.isArray(imported)||!imported.length||imported.some(item=>!/^\d{4}-\d{2}-\d{2}$/.test(item.date)||!validPrices(item.prices)))throw new Error('Invalid or incomplete backup');
-        const merged=new Map(history.map(item=>[item.date,item]));imported.forEach(item=>merged.set(item.date,item));history=sortHistory(Array.from(merged.values()));saveHistory();renderHero();renderHistory();setWeek(nextFriday(history.at(-1).date));document.querySelector('#formStatus').textContent=`Imported ${imported.length} complete update days.`;
-      }catch(error){document.querySelector('#formStatus').textContent='That backup could not be imported. Use a CSV or JSON file exported by this tracker.';}
-      event.target.value='';
-    });
-    document.addEventListener('click',event=>{const button=event.target.closest('[data-edit-week]');if(button)setWeek(button.dataset.editWeek);});
-
-    renderHero();renderHistory();setWeek(history.at(-1).date,{scroll:false});
+    document.querySelector('#downloadBackup').addEventListener('click',()=>download('northstar-stock-history.json',JSON.stringify({version:1,history},null,2)+'\n','application/json'));
+    document.addEventListener('click',event=>{const button=event.target.closest('[data-review-week]');if(button){document.querySelector('#weekDate').value=button.dataset.reviewWeek;renderEditor(button.dataset.reviewWeek);}});
+    renderHero();renderHistory();renderEditor();
   </script>
 </body>
 </html>

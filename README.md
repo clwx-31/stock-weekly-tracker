@@ -1,39 +1,27 @@
 # Northstar Weekly Stock Tracker
 
-A standalone browser-based tracker for the year-long business class stock
-project. It compares last week's prices with this week's entry, calculates the
-portfolio results, and stores future weeks in the browser.
+Published website: https://clwx-31.github.io/stock-weekly-tracker/
 
-## Weekly use
+The website is read-only. Prices, shares and history come from the published
+repository, with no browser overrides. Select a snapshot to review it, copy its
+spreadsheet rows, or download CSV/JSON history. Updates are made in the repository.
 
-1. Open the live site in the same browser used previously.
-2. Enter all 13 Friday prices around 11:20 AM Eastern.
-3. Save the week.
-4. Copy the calculated rows into the class spreadsheet.
-5. Occasionally download a CSV or JSON backup, especially before switching
-   browsers or devices.
+The stock table and spreadsheet copy include company, symbol, previous price,
+shares, current price, per-share profit/loss, current value and total profit/loss.
+The table also shows previous project P/L, interval P/L and new project P/L.
 
-No account, server, analytics, or third-party JavaScript is used. Browser data
-is stored under the `northstar-weekly-history-v1` local-storage key.
+## October 8, 2026
 
-## October 8, 2026 update
+Today’s USD intraday quotes are from [Stock Analysis](https://stockanalysis.com/),
+with per-stock times from 11:08–11:35 AM EDT. The previous Friday, October 2,
+uses historical **Close**, not dividend-adjusted prices, from each symbol’s
+`https://stockanalysis.com/stocks/<symbol>/history/` page. The comparison is
+Friday’s close to today’s intraday quote; it is not a synchronized midday series.
 
-Added all 13 USD intraday quotes from [Stock Analysis](https://stockanalysis.com/).
-Each ticker’s source is `https://stockanalysis.com/stocks/<lowercase-ticker>/`.
-Individual quote times appear beside each symbol and in the snapshot’s
-`quoteTimes` metadata: 11:08–11:35 AM EDT. This is not a synchronized 11:20
-reading or a closing-price snapshot. The comparison is against September 28,
-a ten-calendar-day interval.
+Stocks: **$18,975.63**. Account including $1,522.24 cash: **$20,497.87**.
+Gain since the $18,477.76 purchase basis: **+$497.87**. Dividends and fees are
+excluded. Existing history is preserved; the earlier same-day update is in Git.
 
-Verified stocks: **$18,975.63**; account with cash: **$20,497.87**; change from
-September 28: **+$524.65**; gain since purchase: **+$497.87**. Returns exclude
-dividends and fees; cash remains $1,522.24. Historical entries and browser
-corrections are preserved.
-
-Prices are converted to integer cents before multiplication and aggregation.
-Fractional-cent inputs are rejected. Run `node tests/math.cjs` to check all
-historical totals, rendered metrics, row P/L sums, cash, basis, and invalid
-prices.
-
-Refreshed October 8 at 11:37 AM EDT with the latest available source quotes.
-The earlier same-day snapshot is preserved in Git history.
+Run `node tests/math.cjs` to check exact totals, the last-week baseline,
+13 rows and eight columns, spreadsheet output, balances and read-only controls.
+See `AGENTS.md` for the requirements for future stock updates.
