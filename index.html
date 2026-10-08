@@ -216,9 +216,9 @@
     </section>
 
     <section class="summary-grid" aria-label="Latest portfolio summary">
-      <div class="summary-card"><span>Latest saved week</span><strong id="latestDate">—</strong><small id="latestDateNote">Local history</small></div>
+      <div class="summary-card"><span>Latest snapshot</span><strong id="latestDate">—</strong><small id="latestDateNote">Local history</small></div>
       <div class="summary-card"><span>Portfolio value</span><strong id="latestValue">—</strong><small>Invested positions</small></div>
-      <div class="summary-card"><span>Weekly move</span><strong id="latestWeekly">—</strong><small>Against prior snapshot</small></div>
+      <div class="summary-card"><span>Change since prior snapshot</span><strong id="latestWeekly">—</strong><small>Against prior snapshot</small></div>
       <div class="summary-card"><span>Cash reserve</span><strong>$1,522.24</strong><small>Available to rebalance</small></div>
       <div class="summary-card"><span>Total account</span><strong id="latestAccount">—</strong><small>Positions plus cash</small></div>
     </section>
@@ -228,7 +228,7 @@
         <div class="sheet-head">
           <div>
             <p class="section-kicker">Weekly entry desk</p>
-            <h2 id="sheet-title">Last week → This week</h2>
+            <h2 id="sheet-title">Previous snapshot → Selected date</h2>
             <p class="section-copy" id="comparisonCopy">Enter one positive price for every stock. Calculations update as you type.</p>
           </div>
           <label class="date-control"><span>This week’s date</span><input type="date" id="weekDate" required></label>
@@ -237,16 +237,16 @@
         <div class="draft-summary" aria-live="polite">
           <div class="draft-metric"><span>Prices entered</span><strong id="enteredCount">0 / 13</strong></div>
           <div class="draft-metric"><span>This week’s value</span><strong id="draftValue">—</strong></div>
-          <div class="draft-metric"><span>Weekly change</span><strong id="draftChange">—</strong></div>
+          <div class="draft-metric"><span>Snapshot change</span><strong id="draftChange">—</strong></div>
           <div class="draft-metric"><span>New project P/L</span><strong id="draftBalance">—</strong></div>
         </div>
 
         <div class="table-scroll">
           <table class="editor-table">
-            <thead><tr><th scope="col">Company</th><th scope="col">Last week’s price</th><th scope="col">Shares</th><th scope="col">Current price<br>(today)</th><th scope="col">P/L per share<br>(today − last week)</th><th scope="col">Current value</th><th scope="col">Total P/L<br>(shares × P/L)</th></tr></thead>
+            <thead><tr><th scope="col">Company</th><th scope="col">Previous price</th><th scope="col">Shares</th><th scope="col">Selected date’s price</th><th scope="col">P/L per share<br>(selected − previous)</th><th scope="col">Current value</th><th scope="col">Total P/L<br>(shares × P/L)</th></tr></thead>
             <tbody id="editorBody"></tbody>
             <tfoot>
-              <tr><td class="balance-label" colspan="5">Last week’s project profit/loss</td><td class="balance-amount" colspan="2" id="previousBalance">—</td></tr>
+              <tr><td class="balance-label" colspan="5">Previous snapshot’s project profit/loss</td><td class="balance-amount" colspan="2" id="previousBalance">—</td></tr>
               <tr><td class="balance-label" colspan="5">Plus this week’s total profit/loss</td><td class="balance-amount" colspan="2" id="weeklyProfit">—</td></tr>
               <tr class="new-balance"><td class="balance-label" colspan="5">New project profit/loss balance</td><td class="balance-amount" colspan="2" id="newBalance">—</td></tr>
             </tfoot>
@@ -292,7 +292,7 @@
       </div>
       <div class="table-scroll history-table-wrap">
         <table class="history-table">
-          <thead><tr><th scope="col">Update date</th><th scope="col">Portfolio value</th><th scope="col">Weekly change</th><th scope="col">Since purchase</th><th scope="col"><span class="sr-only">Action</span></th></tr></thead>
+          <thead><tr><th scope="col">Update date</th><th scope="col">Portfolio value</th><th scope="col">Snapshot change</th><th scope="col">Since purchase</th><th scope="col"><span class="sr-only">Action</span></th></tr></thead>
           <tbody id="historyBody"></tbody>
         </table>
       </div>
@@ -326,18 +326,21 @@
       {date:'2026-08-21',prices:{NVDA:215.59,AVGO:367.86,MSFT:484.31,GOOGL:344.24,META:549.66,AMZN:258.91,ISRG:379.16,ABBV:266.23,V:370.25,GE:348.42,CEG:275.07,WMT:102.42,XOM:166.05}},
       {date:'2026-08-28',prices:{NVDA:223.78,AVGO:372.52,MSFT:515.36,GOOGL:347.35,META:584.47,AMZN:266.43,ISRG:371.26,ABBV:257.46,V:382.76,GE:343.65,CEG:281.66,WMT:102.82,XOM:156.37}},
       {date:'2026-09-14',source:'Online market snapshot · 11:46 AM ET',prices:{NVDA:212.08,AVGO:347.82,MSFT:505.14,GOOGL:345.86,META:658.85,AMZN:254.34,ISRG:374.73,ABBV:262.72,V:375.74,GE:317.80,CEG:265.93,WMT:109.08,XOM:165.74}},
-      {date:'2026-09-28',source:'Online market snapshot · 11:05 AM ET',prices:{NVDA:229.44,AVGO:349.45,MSFT:507.35,GOOGL:340.60,META:720.68,AMZN:246.84,ISRG:413.34,ABBV:266.25,V:367.34,GE:318.90,CEG:259.36,WMT:109.11,XOM:163.22}}
+      {date:'2026-09-28',source:'Online market snapshot · 11:05 AM ET',prices:{NVDA:229.44,AVGO:349.45,MSFT:507.35,GOOGL:340.60,META:720.68,AMZN:246.84,ISRG:413.34,ABBV:266.25,V:367.34,GE:318.90,CEG:259.36,WMT:109.11,XOM:163.22}},
+      {date:'2026-10-08',source:'Stock Analysis intraday quotes · 10:55–11:22 AM EDT (times vary by stock)',quoteTimes:{NVDA:'11:22',AVGO:'11:07',MSFT:'11:16',GOOGL:'11:09',META:'11:22',AMZN:'11:11',ISRG:'11:13',ABBV:'10:55',V:'11:04',GE:'11:03',CEG:'11:14',WMT:'11:08',XOM:'10:59'},prices:{NVDA:236.10,AVGO:370.63,MSFT:530.42,GOOGL:352.46,META:721.29,AMZN:259.51,ISRG:412.93,ABBV:266.78,V:374.80,GE:301.47,CEG:293.30,WMT:109.76,XOM:168.73}}
     ];
     const HISTORY_KEY = 'northstar-weekly-history-v1';
     const DRAFT_KEY = 'northstar-weekly-drafts-v1';
     const money = new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'});
     const dateFormat = new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
-    const invested = HOLDINGS.reduce((sum,holding)=>sum+holding.buy*holding.shares,0);
+    const cents = value => Math.round(Number(value)*100);
+    const invested = HOLDINGS.reduce((sum,holding)=>sum+cents(holding.buy)*holding.shares,0)/100;
     let history = loadHistory();
 
     function clone(value){ return JSON.parse(JSON.stringify(value)); }
     function sortHistory(items){ return items.sort((a,b)=>a.date.localeCompare(b.date)); }
-    function validPrices(prices){ return HOLDINGS.every(holding=>Number.isFinite(Number(prices?.[holding.ticker]))&&Number(prices[holding.ticker])>0); }
+    function validPrice(price){ return Number.isFinite(Number(price))&&Number(price)>0&&Math.abs(Number(price)*100-cents(price))<1e-7; }
+    function validPrices(prices){ return HOLDINGS.every(holding=>validPrice(prices?.[holding.ticker])); }
     function loadJson(key,fallback){ try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(fallback));}catch(error){return clone(fallback);} }
     function loadHistory(){
       const stored=loadJson(HISTORY_KEY,[]);
@@ -355,7 +358,7 @@
       do{value.setUTCDate(value.getUTCDate()+1);}while(value.getUTCDay()!==5);
       return value.toISOString().slice(0,10);
     }
-    function valueOf(snapshot){ return HOLDINGS.reduce((sum,holding)=>sum+holding.shares*Number(snapshot.prices[holding.ticker]),0); }
+    function valueOf(snapshot){ return HOLDINGS.reduce((sum,holding)=>sum+holding.shares*cents(snapshot.prices[holding.ticker]),0)/100; }
     function previousFor(date){ return [...history].filter(item=>item.date<date).pop()||null; }
     function savedFor(date){ return history.find(item=>item.date===date)||null; }
     function signedCurrency(value){ return `${value>=0?'+':'−'}${money.format(Math.abs(value))}`; }
@@ -387,7 +390,7 @@
       document.querySelector('#editorBody').innerHTML=HOLDINGS.map(holding=>{
         const prior=previous?Number(previous.prices[holding.ticker]):null;
         const price=prices[holding.ticker]??'';
-        return `<tr data-row="${holding.ticker}"><td><span class="company">${escapeHtml(holding.company)}</span><span class="ticker">${holding.ticker}</span></td><td>${prior===null?'—':money.format(prior)}</td><td>${holding.shares}</td><td><label class="sr-only" for="price-${holding.ticker}">${holding.ticker} price for ${date}</label><input class="price-input" id="price-${holding.ticker}" data-price="${holding.ticker}" type="number" min="0.01" step="0.01" inputmode="decimal" value="${price}" placeholder="0.00"></td><td class="row-change" data-per-share>—</td><td data-value>—</td><td class="row-change" data-change>—</td></tr>`;
+        return `<tr data-row="${holding.ticker}"><td><span class="company">${escapeHtml(holding.company)}</span><span class="ticker">${holding.ticker}${saved?.quoteTimes?.[holding.ticker]?` · ${escapeHtml(saved.quoteTimes[holding.ticker])} AM EDT`:''}</span></td><td>${prior===null?'—':money.format(prior)}</td><td>${holding.shares}</td><td><label class="sr-only" for="price-${holding.ticker}">${holding.ticker} price for ${date}</label><input class="price-input" id="price-${holding.ticker}" data-price="${holding.ticker}" type="number" min="0.01" step="0.01" inputmode="decimal" value="${price}" placeholder="0.00"></td><td class="row-change" data-per-share>—</td><td data-value>—</td><td class="row-change" data-change>—</td></tr>`;
       }).join('');
       document.querySelectorAll('[data-price]').forEach(input=>input.addEventListener('input',()=>{
         input.removeAttribute('aria-invalid');saveDraft(date,Object.fromEntries(Array.from(document.querySelectorAll('[data-price]')).map(field=>[field.dataset.price,field.value])));renderDraft();
@@ -403,15 +406,15 @@
       const prices=currentValues();
       let total=0,count=0;
       HOLDINGS.forEach(holding=>{
-        const price=prices[holding.ticker],valid=Number.isFinite(price)&&price>0;
+        const price=prices[holding.ticker],valid=validPrice(price);
         const row=document.querySelector(`[data-row="${holding.ticker}"]`);
         const perShareCell=row.querySelector('[data-per-share]'),valueCell=row.querySelector('[data-value]'),changeCell=row.querySelector('[data-change]');
         if(!valid||!previous){perShareCell.textContent='—';valueCell.textContent='—';changeCell.textContent='—';setTone(perShareCell,0,false);setTone(changeCell,0,false);return;}
         count+=1;
-        const perShare=price-Number(previous.prices[holding.ticker]),value=price*holding.shares,change=perShare*holding.shares;
+        const perShare=(cents(price)-cents(previous.prices[holding.ticker]))/100,value=cents(price)*holding.shares/100,change=(cents(price)-cents(previous.prices[holding.ticker]))*holding.shares/100;
         total+=value;perShareCell.textContent=signedCurrency(perShare);valueCell.textContent=money.format(value);changeCell.textContent=signedCurrency(change);setTone(perShareCell,perShare);setTone(changeCell,change);
       });
-      const complete=count===HOLDINGS.length&&Boolean(previous);
+      const complete=count===HOLDINGS.length&&Boolean(previous)&&validPrices(prices);
       const change=complete?total-valueOf(previous):0;
       const previousBalance=previous?valueOf(previous)-invested:0;
       const newBalance=previousBalance+change;
@@ -446,8 +449,8 @@
     }
     function validateForm(){
       if(isComplete()&&previousFor(document.querySelector('#weekDate').value))return true;
-      document.querySelectorAll('[data-price]').forEach(input=>input.setAttribute('aria-invalid',String(!(Number(input.value)>0))));
-      document.querySelector('#formStatus').textContent='Enter a positive price for all 13 stocks before saving.';
+      document.querySelectorAll('[data-price]').forEach(input=>input.setAttribute('aria-invalid',String(!(validPrice(input.value)))));
+      document.querySelector('#formStatus').textContent='Enter a positive price with at most two decimal places for all 13 stocks before saving.';
       document.querySelector('[data-price][aria-invalid="true"]')?.focus();return false;
     }
     async function copyText(text){
@@ -475,10 +478,10 @@
     document.querySelector('#copySheet').addEventListener('click',async()=>{
       if(!validateForm())return;
       const date=document.querySelector('#weekDate').value,previous=previousFor(date),prices=currentValues();
-      const rows=[['Company','Symbol','Price/share last week','Shares','Price/share this week','Profit/loss per share','Total profit/loss']];
-      HOLDINGS.forEach(holding=>{const prior=Number(previous.prices[holding.ticker]),price=prices[holding.ticker];rows.push([holding.company,holding.ticker,prior.toFixed(2),holding.shares,price.toFixed(2),(price-prior).toFixed(2),((price-prior)*holding.shares).toFixed(2)]);});
+      const rows=[['Company','Symbol','Price/share previous snapshot','Shares','Price/share selected date','Profit/loss per share','Total profit/loss']];
+      HOLDINGS.forEach(holding=>{const prior=Number(previous.prices[holding.ticker]),price=prices[holding.ticker];rows.push([holding.company,holding.ticker,prior.toFixed(2),holding.shares,price.toFixed(2),((cents(price)-cents(prior))/100).toFixed(2),((cents(price)-cents(prior))*holding.shares/100).toFixed(2)]);});
       const weekly=valueOf({prices})-valueOf(previous),previousBalance=valueOf(previous)-invested;
-      rows.push([],['','','','','','Last week’s project P/L',previousBalance.toFixed(2)],['','','','','','This week’s total P/L',weekly.toFixed(2)],['','','','','','New project P/L balance',(previousBalance+weekly).toFixed(2)]);
+      rows.push([],['','','','','','Previous snapshot’s project P/L',previousBalance.toFixed(2)],['','','','','','Snapshot total P/L',weekly.toFixed(2)],['','','','','','New project P/L balance',(previousBalance+weekly).toFixed(2)]);
       await copyText(rows.map(row=>row.join('\t')).join('\n'));document.querySelector('#formStatus').textContent='Spreadsheet rows copied. Paste them into the first cell of your class sheet.';
     });
     document.querySelector('#downloadCsv').addEventListener('click',()=>download('northstar-stock-history.csv',csvContents(),'text/csv;charset=utf-8'));
