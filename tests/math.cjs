@@ -25,9 +25,9 @@ vm.runInContext(`
   renderHero(); renderDraft(); renderHistory();
 `, context);
 const expected = vm.runInContext(`({value:valueOf(history.at(-1)),prior:valueOf(history.at(-2)),account:valueOf(history.at(-1))+CASH,pl:valueOf(history.at(-1))-invested})`,context);
-assert.equal(element('#latestValue').textContent, '$18,975.96');
-assert.equal(element('#latestAccount').textContent, '$20,498.20');
-assert.equal(element('#newBalance').textContent, '+$498.20');
+assert.equal(element('#latestValue').textContent, '$18,975.63');
+assert.equal(element('#latestAccount').textContent, '$20,497.87');
+assert.equal(element('#newBalance').textContent, '+$497.87');
 assert.equal(element('#latestWeekly').textContent, element('#weeklyProfit').textContent);
 let rowSum = 0;
 for (const [selector, item] of elements) if(selector.endsWith(' [data-change]')) rowSum += Number(item.textContent.replace(/[+$,]/g,'').replace('−','-'));

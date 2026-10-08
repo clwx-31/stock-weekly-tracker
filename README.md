@@ -21,12 +21,12 @@ is stored under the `northstar-weekly-history-v1` local-storage key.
 Added all 13 USD intraday quotes from [Stock Analysis](https://stockanalysis.com/).
 Each ticker’s source is `https://stockanalysis.com/stocks/<lowercase-ticker>/`.
 Individual quote times appear beside each symbol and in the snapshot’s
-`quoteTimes` metadata: 10:55–11:22 AM EDT. This is not a synchronized 11:20
+`quoteTimes` metadata: 11:08–11:35 AM EDT. This is not a synchronized 11:20
 reading or a closing-price snapshot. The comparison is against September 28,
 a ten-calendar-day interval.
 
-Verified stocks: **$18,975.96**; account with cash: **$20,498.20**; change from
-September 28: **+$524.98**; gain since purchase: **+$498.20**. Returns exclude
+Verified stocks: **$18,975.63**; account with cash: **$20,497.87**; change from
+September 28: **+$524.65**; gain since purchase: **+$497.87**. Returns exclude
 dividends and fees; cash remains $1,522.24. Historical entries and browser
 corrections are preserved.
 
@@ -34,3 +34,6 @@ Prices are converted to integer cents before multiplication and aggregation.
 Fractional-cent inputs are rejected. Run `node tests/math.cjs` to check all
 historical totals, rendered metrics, row P/L sums, cash, basis, and invalid
 prices.
+
+Refreshed October 8 at 11:37 AM EDT with the latest available source quotes.
+The earlier same-day snapshot is preserved in Git history.
