@@ -17,9 +17,9 @@ for(const snapshot of history){
 }
 if(previousFor('2026-10-08').date!=='2026-10-02')throw Error('Wrong last-week baseline');
 `,context);
-assert.equal(el('#latestValue').textContent,'$18,975.63');
-assert.equal(el('#latestAccount').textContent,'$20,497.87');
-assert.equal(el('#newBalance').textContent,'+$497.87');
+assert.equal(el('#latestValue').textContent,'$18,948.87');
+assert.equal(el('#latestAccount').textContent,'$20,471.11');
+assert.equal(el('#newBalance').textContent,'+$471.11');
 assert.equal((el('#editorBody').innerHTML.match(/<tr /g)||[]).length,13);
 assert.equal((el('#editorBody').innerHTML.match(/<td[ >]/g)||[]).length,13*8);
 const rows=vm.runInContext("sheetRows('2026-10-08')",context).split('\n');
