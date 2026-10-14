@@ -15,14 +15,18 @@ for(const snapshot of history){
  const previous=previousFor(snapshot.date);
  if(previous){const sum=HOLDINGS.reduce((sum,h)=>sum+cents(rowValues(h,snapshot,previous).change),0);if(sum!==cents(valueOf(snapshot))-cents(valueOf(previous)))throw Error('Row P/L mismatch');}
 }
+if(history.at(-1).date!=='2026-10-14')throw Error('Wrong latest date');
+if(previousFor('2026-10-14').date!=='2026-10-09')throw Error('Wrong October 14 baseline');
+if(valueOf(previousFor('2026-10-14'))!==19089.20)throw Error('Wrong Friday total');
 if(previousFor('2026-10-08').date!=='2026-10-02')throw Error('Wrong last-week baseline');
 `,context);
-assert.equal(el('#latestValue').textContent,'$18,948.87');
-assert.equal(el('#latestAccount').textContent,'$20,471.11');
-assert.equal(el('#newBalance').textContent,'+$471.11');
+assert.equal(el('#latestValue').textContent,'$19,084.19');
+assert.equal(el('#latestAccount').textContent,'$20,606.43');
+assert.equal(el('#latestWeekly').textContent,'−$5.01');
+assert.equal(el('#newBalance').textContent,'+$606.43');
 assert.equal((el('#editorBody').innerHTML.match(/<tr /g)||[]).length,13);
 assert.equal((el('#editorBody').innerHTML.match(/<td[ >]/g)||[]).length,13*8);
-const rows=vm.runInContext("sheetRows('2026-10-08')",context).split('\n');
+const rows=vm.runInContext("sheetRows('2026-10-14')",context).split('\n');
 assert.equal(rows[0].split('\t').length,8);
 assert.equal(rows.slice(1,14).every(row=>row.split('\t').length===8),true);
 vm.runInContext("renderEditor('2026-08-19')",context);
