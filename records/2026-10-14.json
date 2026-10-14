@@ -1,0 +1,136 @@
+{
+  "snapshot": {
+    "date": "2026-10-14",
+    "previousDate": "2026-10-08",
+    "source": "Stock Analysis intraday quotes · 10:34–11:02 AM EDT (times vary by stock)",
+    "quoteTimes": {
+      "NVDA": "10:51",
+      "AVGO": "11:02",
+      "MSFT": "11:01",
+      "GOOGL": "10:51",
+      "META": "10:36",
+      "AMZN": "10:51",
+      "ISRG": "10:34",
+      "ABBV": "10:44",
+      "V": "10:58",
+      "GE": "10:46",
+      "CEG": "10:56",
+      "WMT": "10:48",
+      "XOM": "11:01"
+    },
+    "prices": {
+      "NVDA": 224.09,
+      "AVGO": 350.77,
+      "MSFT": 539.32,
+      "GOOGL": 354.41,
+      "META": 745.39,
+      "AMZN": 256.27,
+      "ISRG": 417.47,
+      "ABBV": 281.9,
+      "V": 392.54,
+      "GE": 310.86,
+      "CEG": 282.26,
+      "WMT": 114.05,
+      "XOM": 175.39
+    }
+  },
+  "holdings": [
+    {
+      "ticker": "NVDA",
+      "company": "NVIDIA",
+      "sector": "Information Technology",
+      "shares": 8,
+      "buy": 219.38
+    },
+    {
+      "ticker": "AVGO",
+      "company": "Broadcom",
+      "sector": "Information Technology",
+      "shares": 5,
+      "buy": 361.96
+    },
+    {
+      "ticker": "MSFT",
+      "company": "Microsoft",
+      "sector": "Information Technology",
+      "shares": 2,
+      "buy": 484
+    },
+    {
+      "ticker": "GOOGL",
+      "company": "Alphabet",
+      "sector": "Communication Services",
+      "shares": 5,
+      "buy": 345.11
+    },
+    {
+      "ticker": "META",
+      "company": "Meta Platforms",
+      "sector": "Communication Services",
+      "shares": 2,
+      "buy": 549.1
+    },
+    {
+      "ticker": "AMZN",
+      "company": "Amazon",
+      "sector": "Consumer Discretionary",
+      "shares": 6,
+      "buy": 263.58
+    },
+    {
+      "ticker": "ISRG",
+      "company": "Intuitive Surgical",
+      "sector": "Health Care",
+      "shares": 3,
+      "buy": 400.51
+    },
+    {
+      "ticker": "ABBV",
+      "company": "AbbVie",
+      "sector": "Health Care",
+      "shares": 5,
+      "buy": 263.65
+    },
+    {
+      "ticker": "V",
+      "company": "Visa",
+      "sector": "Financials",
+      "shares": 4,
+      "buy": 369.6
+    },
+    {
+      "ticker": "GE",
+      "company": "GE Aerospace",
+      "sector": "Industrials",
+      "shares": 4,
+      "buy": 360.8
+    },
+    {
+      "ticker": "CEG",
+      "company": "Constellation Energy",
+      "sector": "Utilities",
+      "shares": 5,
+      "buy": 272.39
+    },
+    {
+      "ticker": "WMT",
+      "company": "Walmart",
+      "sector": "Consumer Staples",
+      "shares": 12,
+      "buy": 116.39
+    },
+    {
+      "ticker": "XOM",
+      "company": "Exxon Mobil",
+      "sector": "Energy",
+      "shares": 8,
+      "buy": 167.46
+    }
+  ],
+  "cashCents": 152224,
+  "previousDate": "2026-10-08",
+  "stockValueCents": 1908419,
+  "projectProfitCents": 60643,
+  "previousProjectProfitCents": 47111,
+  "intervalProfitCents": 13532
+}
