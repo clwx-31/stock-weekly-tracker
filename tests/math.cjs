@@ -15,16 +15,18 @@ for(const snapshot of history){
  const previous=previousFor(snapshot.date);
  if(previous){const sum=HOLDINGS.reduce((sum,h)=>sum+cents(rowValues(h,snapshot,previous).change),0);if(sum!==cents(valueOf(snapshot))-cents(valueOf(previous)))throw Error('Row P/L mismatch');}
 }
-if(history.at(-1).date!=='2026-10-14')throw Error('Wrong latest date');
+if(history.at(-1).date!=='2026-10-19')throw Error('Wrong latest date');
+if(previousFor('2026-10-19').date!=='2026-10-14')throw Error('Wrong October 19 baseline');
+if(valueOf(previousFor('2026-10-19'))!==19084.19)throw Error('Wrong saved October 14 total');
 if(previousFor('2026-10-14').date!=='2026-10-08')throw Error('Wrong October 14 baseline');
 if(valueOf(previousFor('2026-10-14'))!==18948.87)throw Error('Wrong saved prior total');
 if(previousFor('2026-10-08').date!=='2026-10-02')throw Error('Wrong last-week baseline');
 `,context);
-assert.equal(el('#latestValue').textContent,'$19,084.19');
-assert.equal(el('#latestAccount').textContent,'$20,606.43');
-assert.equal(el('#latestWeekly').textContent,'+$135.32');
-assert.equal(el('#previousBalance').textContent,'+$471.11');
-assert.equal(el('#newBalance').textContent,'+$606.43');
+assert.equal(el('#latestValue').textContent,'$18,927.98');
+assert.equal(el('#latestAccount').textContent,'$20,450.22');
+assert.equal(el('#latestWeekly').textContent,'−$156.21');
+assert.equal(el('#previousBalance').textContent,'+$606.43');
+assert.equal(el('#newBalance').textContent,'+$450.22');
 assert.equal((el('#editorBody').innerHTML.match(/<tr /g)||[]).length,13);
 assert.equal((el('#editorBody').innerHTML.match(/<td[ >]/g)||[]).length,13*8);
 const rows=vm.runInContext("sheetRows('2026-10-14')",context).split('\n');
@@ -55,3 +57,8 @@ assert(rows.includes('Previous snapshot project P/L\t471.11'));
 assert(rows.includes('Snapshot total P/L\t135.32'));
 assert(rows.includes('New project P/L balance\t606.43'));
 console.log('Passed: saved weekly archives and carried-forward spreadsheet balances.');
+
+const currentRows=vm.runInContext("sheetRows('2026-10-19')",context).split('\n');
+assert(currentRows.includes('Previous snapshot project P/L\t606.43'));
+assert(currentRows.includes('Snapshot total P/L\t-156.21'));
+assert(currentRows.includes('New project P/L balance\t450.22'));

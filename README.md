@@ -10,6 +10,36 @@ The stock table and spreadsheet copy include company, symbol, previous price,
 shares, current price, per-share profit/loss, current value and total profit/loss.
 The table also shows previous project P/L, interval P/L and new project P/L.
 
+## October 19, 2026
+
+All 13 USD quotes were checked on October 19, 2026. These are intraday
+prices from 10:39–11:08 AM EDT, with different timestamps per stock, not closing
+prices or a simultaneous snapshot. The previous prices are the exact saved
+October 14 update; its prices and project balance remain unchanged.
+
+| Symbol / source | October 14 saved | October 19 intraday | Quote time (EDT) |
+|---|---:|---:|---|
+| [NVDA](https://stockanalysis.com/stocks/nvda/history/) | $224.09 | $218.07 | 11:08 AM |
+| [AVGO](https://stockanalysis.com/stocks/avgo/history/) | $350.77 | $337.35 | 10:48 AM |
+| [MSFT](https://stockanalysis.com/stocks/msft/history/) | $539.32 | $534.72 | 11:04 AM |
+| [GOOGL](https://stockanalysis.com/stocks/googl/history/) | $354.41 | $345.55 | 11:00 AM |
+| [META](https://stockanalysis.com/stocks/meta/history/) | $745.39 | $703.01 | 11:05 AM |
+| [AMZN](https://stockanalysis.com/stocks/amzn/history/) | $256.27 | $262.60 | 11:04 AM |
+| [ISRG](https://stockanalysis.com/stocks/isrg/history/) | $417.47 | $429.50 | 10:43 AM |
+| [ABBV](https://stockanalysis.com/stocks/abbv/history/) | $281.90 | $283.67 | 10:49 AM |
+| [V](https://stockanalysis.com/stocks/v/history/) | $392.54 | $402.25 | 10:42 AM |
+| [GE](https://stockanalysis.com/stocks/ge/history/) | $310.86 | $310.95 | 10:39 AM |
+| [CEG](https://stockanalysis.com/stocks/ceg/history/) | $282.26 | $263.37 | 10:57 AM |
+| [WMT](https://stockanalysis.com/stocks/wmt/history/) | $114.05 | $118.50 | 10:54 AM |
+| [XOM](https://stockanalysis.com/stocks/xom/history/) | $175.39 | $177.42 | 11:05 AM |
+
+Stocks: **$18,927.98**. Account including $1,522.24 cash: **$20,450.22**.
+Previous stock value: **$19,084.19**. Interval P/L: **-$156.21**.
+Project P/L reconciles: **$606.43 - $156.21 = $450.22**.
+Purchase basis remains $18,477.76. Dividends and fees are excluded.
+The complete record, including source links and integer-cent totals, is archived
+in `records/2026-10-19.json`.
+
 ## October 14, 2026
 
 Today's USD intraday quotes were checked on October 14, 2026. Source quote times
